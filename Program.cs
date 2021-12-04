@@ -25,8 +25,8 @@ namespace Advent_of_Code_2021
             //Day7 prog = new Day7();
             //Day6 prog = new Day6();
             //Day5 prog = new Day5();
-            //Day4 prog = new Day4();
-            Day3 prog = new Day3();
+            Day4 prog = new Day4();
+            //Day3 prog = new Day3();
             //Day2 prog = new Day2();
             //Day1 prog = new Day1();
             prog.Run();

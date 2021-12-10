@@ -69,7 +69,7 @@ namespace Advent_of_Code_2021
                     if (c.height == 8)
                         continue;
                     /*
-                     * Misenterpertation of 'evenly flow' to mean that the basins only connect to one number higher than the current number
+                     * Misinterpertation of 'evenly flow' to mean that the basins only connect to one number higher than the current number
                     int hh = getData(data, c.x - 1, c.y);
                     if (hh == c.height + 1)
                     {
@@ -231,6 +231,34 @@ namespace Advent_of_Code_2021
             int result = basinSizes[basinSizes.Length - 1] * basinSizes[basinSizes.Length - 2] * basinSizes[basinSizes.Length - 3];
 
             Console.WriteLine("Result: " + result);
+
+
+
+            string[,] tags = new string[2, 10];
+            tags[0, 0] = ""; tags[1, 0] = "";
+            tags[0, 1] = "r{"; tags[1, 1] = "}r";
+            tags[0, 2] = "n["; tags[1, 2] = "]n";
+            tags[0, 3] = "y{"; tags[1, 3] = "}y";
+            tags[0, 4] = "l["; tags[1, 4] = "]l";
+            tags[0, 5] = "g{"; tags[1, 5] = "}g";
+            tags[0, 6] = "e["; tags[1, 6] = "]e";
+            tags[0, 7] = "b{"; tags[1, 7] = "}b";
+            tags[0, 8] = "p["; tags[1, 8] = "]p";
+            tags[0, 9] = "-["; tags[1, 9] = "]-";
+
+            for (int y = 0; y < 30; y++)
+            {
+                for (int x = 0; x < 30; x++)
+                {
+                    int h = getData(data, x, y);
+                    Console.Write(tags[0,h]);
+                    Console.Write(h);
+                    Console.Write(tags[1, h]);
+
+                }
+                Console.WriteLine();
+
+            }
         }
 
         public int getData(string[] data, int x, int y)

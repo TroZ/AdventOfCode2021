@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Advent_of_Code_2021
 {
@@ -18,8 +19,8 @@ namespace Advent_of_Code_2021
             //Day14 prog = new Day14();
             //Day13 prog = new Day13();
             //Day12 prog = new Day12();
-            //Day11 prog = new Day11();
-            Day10 prog = new Day10();
+            Day11 prog = new Day11();
+            //Day10 prog = new Day10();
             //Day9 prog = new Day9();
             //Day8 prog = new Day8();
             //Day7 prog = new Day7();
@@ -65,9 +66,52 @@ namespace Advent_of_Code_2021
             //*/
         }
 
-        internal static void saveImg(Bitmap pic, int num)
+        internal static void saveImg(Bitmap pic, int day, int frame = -1)
         {
-            pic.Save(@"C:\Users\TroZ\source\repos\AdventOfCode2021\AdventOfCode2021\day" + num + ".png", System.Drawing.Imaging.ImageFormat.Png);
+            String name = "" + day;
+            if (frame > -1)
+            {
+                name += "-" + frame;
+            }
+            pic.Save(@"C:\Users\TroZ\source\repos\Advent of Code 2021\Advent of Code 2021\day" + name + ".png", System.Drawing.Imaging.ImageFormat.Png);
+        }
+
+        internal static ImageMagick.MagickImageCollection getAnimatedImage()
+        {
+            return new ImageMagick.MagickImageCollection();
+        }
+
+        internal static void addAnimatedImageFrame(ImageMagick.MagickImageCollection col, Bitmap img, int delay=100)
+        {
+            ImageMagick.IMagickImage<byte> image = null;
+            //ImageMagick.MagickFactory f = new ImageMagick.MagickFactory();
+            using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+            {
+                img.Save(ms, ImageFormat.Png);
+                ms.Position = 0;
+                image = new ImageMagick.MagickImage(ms);
+            }
+            col.Add(image);
+            col[col.Count - 1].AnimationDelay = delay;
+        }
+
+        internal static void addAnimatedImageFrame(ImageMagick.MagickImageCollection col, ImageMagick.IMagickImage<byte> img, int delay = 10)
+        {
+            col.Add(img);
+            col[col.Count - 1].AnimationDelay = delay;
+        }
+
+        internal static void saveAnimatedImage(String name, ImageMagick.MagickImageCollection col, int colors = 256)
+        {
+            ImageMagick.QuantizeSettings settings = new ImageMagick.QuantizeSettings();
+            settings.Colors = colors;
+            col.Quantize(settings);
+
+            // Optionally optimize the images (images should have the same size).
+            col.Optimize();
+
+            //save gif
+            col.Write(@"C:\Users\TroZ\source\repos\Advent of Code 2021\Advent of Code 2021\" + name + ".gif");
         }
     }
 

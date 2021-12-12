@@ -18,8 +18,8 @@ namespace Advent_of_Code_2021
             //Day15 prog = new Day15();
             //Day14 prog = new Day14();
             //Day13 prog = new Day13();
-            //Day12 prog = new Day12();
-            Day11 prog = new Day11();
+            Day12 prog = new Day12();
+            //Day11 prog = new Day11();
             //Day10 prog = new Day10();
             //Day9 prog = new Day9();
             //Day8 prog = new Day8();

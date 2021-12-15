@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Reflection;
 
 namespace Advent_of_Code_2021
 {
@@ -15,8 +16,8 @@ namespace Advent_of_Code_2021
             //Day18 prog = new Day18();
             //Day17 prog = new Day17();
             //Day16 prog = new Day16();
-            //Day15 prog = new Day15();
-            Day14 prog = new Day14();
+            Day15 prog = new Day15();
+            //Day14 prog = new Day14();
             //Day13 prog = new Day13();
             //Day12 prog = new Day12();
             //Day11 prog = new Day11();
@@ -35,6 +36,51 @@ namespace Advent_of_Code_2021
 
             Console.WriteLine("\n\n\nPress Enter");
             Console.In.ReadLine();
+
+
+            long start = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+            ConsoleColor back = Console.BackgroundColor;
+            ConsoleColor fore = Console.ForegroundColor;
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+            foreach( var t in types)
+            {
+                if (t.Namespace.StartsWith("Advent_of_Code_2021") && t.Name.StartsWith("Day") && !t.IsAbstract )
+                {
+                    ConstructorInfo ci = t.GetConstructor(Type.EmptyTypes);
+                    if (ci != null)
+                    {
+                        object dayInstance = ci.Invoke(null);
+
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.BackgroundColor = ConsoleColor.White;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine(t.FullName);
+                        Console.BackgroundColor = back;
+                        Console.ForegroundColor = fore;
+                        Console.WriteLine();
+
+                        t.GetMethod("Run").Invoke(dayInstance, null);
+                    }
+
+                }
+            }
+
+            long end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.Write("Elapsed time: "+(end-start)+" ms");
+            Console.BackgroundColor = back;
+            Console.ForegroundColor = fore;
+            Console.WriteLine();
+            Console.WriteLine();
+
         }
 
 

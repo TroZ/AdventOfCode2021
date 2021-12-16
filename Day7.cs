@@ -64,17 +64,28 @@ namespace Advent_of_Code_2021
             //part2
             bestcost = int.MaxValue;
             bestpos = 0;
+            Dictionary<int, int> distCost = new Dictionary<int, int>();
 
             for (int i = min; i <= max; i++)
             {
                 int cost = 0;
-                int thiscost = 0;
+                int thisdist;
                 for (int j = 0; j < data.Length; j++)
                 {
-                    thiscost = Math.Abs(i - data[j]);
-                    for(int k = 0; k < thiscost; k++)
+                    thisdist = Math.Abs(i - data[j]);
+                    if (distCost.ContainsKey(thisdist))
                     {
-                        cost += (k+1);
+                        cost += distCost[thisdist];
+                    }
+                    else
+                    {
+                        int thiscost = 0;
+                        for (int k = 0; k < thisdist; k++)
+                        {
+                            thiscost += (k + 1);
+                        }
+                        distCost[thisdist] = thiscost;
+                        cost += thiscost;
                     }
                 }
 

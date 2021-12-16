@@ -95,10 +95,13 @@ namespace Advent_of_Code_2021
             //print(riskmap);
 
             calcRisk(riskmap, totalrisk);
+            //calcRiskImg(riskmap, totalrisk);
 
             //print(totalrisk);
 
             Console.WriteLine("Min Cost Path: " + totalrisk[w - 1, h - 1]);
+
+            //paint(totalrisk);
         }
 
         private void calcRisk(int[,] riskmap, int[,] totalrisk)
@@ -172,5 +175,117 @@ namespace Advent_of_Code_2021
             return min;
         }
 
+
+        void paint(int[,] array)
+        {
+            int min = 0;
+            int max = 0;
+
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    max = Math.Max(max,array[x, y]);
+                }
+            }
+            max++;
+
+            ImageMagick.IMagickColor<byte>[] colors = new ImageMagick.IMagickColor<byte>[max];
+            int stepsize = 500;
+            int steps = (max / stepsize) + 1;
+            double sat = 0.05;
+            double satstep = 0.75 / steps;
+            for(int c = min; c < max; c++)
+            {
+                double hue = (c % stepsize) / (double)stepsize;
+                double saturation = sat + (satstep * (c / stepsize));
+                colors[c] = (new ImageMagick.ColorHSL(hue, saturation, 0.5)).ToMagickColor();
+            }
+
+            ImageMagick.MagickImage img = new ImageMagick.MagickImage(ImageMagick.MagickColors.Black, w*3, h*3);
+            ImageMagick.Drawables draw = new ImageMagick.Drawables();
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    draw.FillColor(colors[array[x, y]]).Rectangle(x * 3, y * 3, x * 3 + 2, y * 3 + 2);
+                }
+            }
+            draw.Draw(img);
+            Program.saveImageMagickImage("day15", img);
+        }
+
+
+        private void calcRiskImg(int[,] riskmap, int[,] totalrisk)
+        {
+            ImageMagick.MagickImageCollection gif = Program.getAnimatedImage();
+            ImageMagick.MagickImage img = new ImageMagick.MagickImage(ImageMagick.MagickColors.Black, w, h);
+            ImageMagick.Drawables draw = new ImageMagick.Drawables();
+            draw.FillColor(ImageMagick.MagickColors.White).Rectangle(0, 0, 1, 1);
+            draw.Draw(img);
+            Program.addAnimatedImageFrame(gif, img, 50);
+
+            bool anychange = true;
+            while (anychange)
+            {
+                anychange = false;
+                for (int y = 0; y < h; y++)
+                {
+                    for (int x = 0; x < w; x++)
+                    {
+                        int min = getMin(totalrisk, riskmap, x, y);
+                        if (min < totalrisk[x, y])
+                        {
+                            totalrisk[x, y] = min;
+                            anychange = true;
+                        }
+                    }
+                }
+
+                paint2(totalrisk, gif, anychange);
+            }
+
+            Program.saveAnimatedImage("day15", gif);
+        }
+
+        void paint2(int[,] array, ImageMagick.MagickImageCollection gif,bool notend)
+        {
+            int min = 0;
+            int max = 0;
+
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    max = Math.Max(max, array[x, y]);
+                }
+            }
+            max++;
+
+            ImageMagick.IMagickColor<byte>[] colors = new ImageMagick.IMagickColor<byte>[max];
+            int stepsize = 500;
+            int steps = (max / stepsize) + 1;
+            double sat = 0.05;
+            double satstep = 0.75 / steps;
+            for (int c = min; c < max; c++)
+            {
+                double hue = (c % stepsize) / (double)stepsize;
+                double saturation = sat + (satstep * (c / stepsize));
+                colors[c] = (new ImageMagick.ColorHSL(hue, saturation, 0.5)).ToMagickColor();
+            }
+
+            ImageMagick.MagickImage img = new ImageMagick.MagickImage(ImageMagick.MagickColors.Black, w, h);
+            ImageMagick.Drawables draw = new ImageMagick.Drawables();
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    draw.FillColor(colors[array[x, y]]).Rectangle(x, y, x+1, y+1);
+                }
+            }
+            draw.Draw(img);
+
+            Program.addAnimatedImageFrame(gif, img, notend ? 10 : 50);
+        }
     }
 }

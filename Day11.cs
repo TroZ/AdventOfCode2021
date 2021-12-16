@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageMagick;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -88,37 +89,8 @@ namespace Advent_of_Code_2021
             }
 
             //save initial state
-            {
-                /*
-                Bitmap b = new Bitmap(5 * width+1, 5 * height+1);
-                Graphics g = Graphics.FromImage(b);
-                g.Clear(Color.Black);
-                /*/
-                ImageMagick.MagickImage img = new ImageMagick.MagickImage(ImageMagick.MagickColors.Black, 51, 51);
-                ImageMagick.Drawables draw = new ImageMagick.Drawables();
-                draw.FillColor(ImageMagick.MagickColors.Black).Rectangle(0, 0, 51, 51);
-                //*/
-                for (int y = 0; y < height; y++)
-                {
-                    for (int x = 0; x < width; x++)
-                    {
-                        if (one[x, y] != 0)
-                        {
-                            //g.FillRectangle(colors[one[x, y]], x * 5 + 1, y * 5 + 1, 4, 4);
-                            draw.FillColor(colors[one[x, y]]).Rectangle(x * 5 + 1, y * 5 + 1, x * 5 + 4, y * 5 + 4);
-
-                        }
-                        else
-                        {
-                            //g.FillRectangle(colors[one[x, y]], x * 5 , y * 5 , 6, 6);
-                            draw.FillColor(colors[one[x, y]]).Rectangle(x * 5, y * 5, x * 5 + 5, y * 5 + 5); ;
-                        }
-                    }
-                }
-                draw.Draw(img);
-                Program.addAnimatedImageFrame(gif, img);
-                //Program.saveImg(b, 11, i);
-            }
+            //AddImageFrame(gif, one, 0);
+            
 
             //main loop
             for (int i = 0; i < 1000; i++)
@@ -166,7 +138,7 @@ namespace Advent_of_Code_2021
 
 
                 //print
-                //*
+                /*
                 Console.WriteLine("Step " + (i + 1) + ", flashes "+flashcount+" :");
                 for (int y = 0; y < height; y++)
                 {
@@ -179,44 +151,49 @@ namespace Advent_of_Code_2021
                 Console.WriteLine();
                 //*/
 
-                //image
-                if (i < 600)
-                {
-                    /*
-                    Bitmap b = new Bitmap(5 * width+1, 5 * height+1);
-                    Graphics g = Graphics.FromImage(b);
-                    g.Clear(Color.Black);
-                    /*/
-                    ImageMagick.MagickImage img = new ImageMagick.MagickImage(new ImageMagick.MagickColor("#000000"), 51, 51);
-                    ImageMagick.Drawables draw = new ImageMagick.Drawables();
-                    //*/
-                    for (int y = 0; y < height; y++)
-                    {
-                        for (int x = 0;x < width; x++)
-                        {
-                            if (one[x, y] != 0)
-                            {
-                                //g.FillRectangle(colors[one[x, y]], x * 5 + 1, y * 5 + 1, 4, 4);
-                                draw.FillColor(colors[one[x, y]]).Rectangle(x * 5 + 1, y * 5 + 1, x * 5 + 3, y * 5 + 3);
+                //AddImageFrame(gif, one, i);
 
-                            }
-                            else
-                            {
-                                //g.FillRectangle(colors[one[x, y]], x * 5 , y * 5 , 6, 6);
-                                draw.FillColor(colors[one[x, y]]).Rectangle(x * 5, y * 5, x * 5 + 5, y * 5 + 5); ;
-                            }
-                        }
-                    }
-                    draw.Draw(img);
-                    Program.addAnimatedImageFrame(gif, img, (i<599)?10:500);
-                    //Program.saveImg(b, 11, i);
-                }
-                
             }
 
-            Program.saveAnimatedImage("Day11", gif, 256);
+            //Program.saveAnimatedImage("Day11", gif, 256);
 
             
+        }
+
+        private void AddImageFrame(MagickImageCollection gif, int[,] one, int i)
+        {
+            //image
+            if (i < 600)
+            {
+                /*
+                Bitmap b = new Bitmap(5 * width+1, 5 * height+1);
+                Graphics g = Graphics.FromImage(b);
+                g.Clear(Color.Black);
+                /*/
+                ImageMagick.MagickImage img = new ImageMagick.MagickImage(new ImageMagick.MagickColor("#000000"), 51, 51);
+                ImageMagick.Drawables draw = new ImageMagick.Drawables();
+                //*/
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        if (one[x, y] != 0)
+                        {
+                            //g.FillRectangle(colors[one[x, y]], x * 5 + 1, y * 5 + 1, 4, 4);
+                            draw.FillColor(colors[one[x, y]]).Rectangle(x * 5 + 1, y * 5 + 1, x * 5 + 3, y * 5 + 3);
+
+                        }
+                        else
+                        {
+                            //g.FillRectangle(colors[one[x, y]], x * 5 , y * 5 , 6, 6);
+                            draw.FillColor(colors[one[x, y]]).Rectangle(x * 5, y * 5, x * 5 + 5, y * 5 + 5); ;
+                        }
+                    }
+                }
+                draw.Draw(img);
+                Program.addAnimatedImageFrame(gif, img, (i < 599) ? 10 : 500);
+                //Program.saveImg(b, 11, i);
+            }
         }
 
         void flash(int[,] data,int x, int y)

@@ -15,8 +15,8 @@ namespace Advent_of_Code_2021
             //Day19 prog = new Day19();
             //Day18 prog = new Day18();
             //Day17 prog = new Day17();
-            //Day16 prog = new Day16();
-            Day15 prog = new Day15();
+            Day16 prog = new Day16();
+            //Day15 prog = new Day15();
             //Day14 prog = new Day14();
             //Day13 prog = new Day13();
             //Day12 prog = new Day12();
@@ -158,6 +158,11 @@ namespace Advent_of_Code_2021
 
             //save gif
             col.Write(@"C:\Users\TroZ\source\repos\Advent of Code 2021\Advent of Code 2021\" + name + ".gif");
+        }
+
+        internal static void saveImageMagickImage(string name, ImageMagick.MagickImage img)
+        {
+            img.Write(@"C:\Users\TroZ\source\repos\Advent of Code 2021\Advent of Code 2021\" + name + ".png");
         }
     }
 
